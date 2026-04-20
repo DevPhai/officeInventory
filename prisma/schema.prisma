@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String?
+  equipment   Equipment[]
+}
+
+model Equipment {
+  id           String         @id @default(cuid())
+  name         String
+  sku          String         @unique
+  description  String?
+  quantity     Int            @default(0)
+  minQuantity  Int            @default(0)
+  categoryId   String
+  category     Category       @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  transactions Transaction[]
+  borrows      BorrowRecord[]
+}
+
+model Transaction {
+  id          String    @id @default(cuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  type        String    // "IN" or "OUT"
+  amount      Int
+  date        DateTime  @default(now())
+  notes       String?
+}
+
+model BorrowRecord {
+  id            String    @id @default(cuid())
+  equipmentId   String
+  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+  borrowerName  String
+  quantity      Int
+  borrowDate    DateTime  @default(now())
+  dueDate       DateTime?
+  returnDate    DateTime?
+  status        String    @default("BORROWED") // "BORROWED" or "RETURNED"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

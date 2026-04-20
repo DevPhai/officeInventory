@@ -47,16 +47,15 @@ export default function StockAdjustmentForm({ equipmentId, currentQuantity }: St
 
   return (
     <form onSubmit={handleSubmit} className="card">
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.25rem' }}>
         <button
           type="button"
           onClick={() => setType('IN')}
           className="btn"
           style={{ 
             flex: 1, 
-            background: type === 'IN' ? '#16a34a' : 'transparent',
+            background: type === 'IN' ? 'var(--success)' : 'var(--accent-soft)',
             color: type === 'IN' ? 'white' : 'var(--foreground)',
-            border: `1px solid ${type === 'IN' ? '#16a34a' : 'var(--border)'}`
           }}
         >
           Stock IN (+)
@@ -67,34 +66,31 @@ export default function StockAdjustmentForm({ equipmentId, currentQuantity }: St
           className="btn"
           style={{ 
             flex: 1, 
-            background: type === 'OUT' ? 'var(--danger)' : 'transparent',
+            background: type === 'OUT' ? 'var(--danger)' : 'var(--accent-soft)',
             color: type === 'OUT' ? 'white' : 'var(--foreground)',
-            border: `1px solid ${type === 'OUT' ? 'var(--danger)' : 'var(--border)'}`
           }}
         >
           Stock OUT (-)
         </button>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Amount</label>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label>Amount</label>
         <input
           name="amount"
           type="number"
           min="1"
           required
-          placeholder="Enter amount"
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
+          placeholder="0"
         />
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Notes</label>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <label>Adjustment Notes</label>
         <input
           name="notes"
           type="text"
-          placeholder="Reason for adjustment"
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
+          placeholder="e.g. Restock from supplier"
         />
       </div>
 
@@ -102,7 +98,7 @@ export default function StockAdjustmentForm({ equipmentId, currentQuantity }: St
         type="submit" 
         disabled={loading} 
         className="btn btn-primary" 
-        style={{ width: '100%', background: type === 'IN' ? '#16a34a' : 'var(--danger)' }}
+        style={{ width: '100%' }}
       >
         {loading ? 'Processing...' : `Confirm Stock ${type}`}
       </button>

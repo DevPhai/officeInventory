@@ -29,8 +29,8 @@ test.describe('Office Equipment Inventory System', () => {
 
   test('should adjust stock levels', async ({ page }) => {
     await page.goto('/inventory');
-    // Click the first "Edit" link
-    await page.locator('text=Edit').first().click();
+    // Click the first Edit icon button
+    await page.locator('a[title="Edit / View Details"]').first().click();
     
     await expect(page).toHaveURL(/\/inventory\/.+/);
     

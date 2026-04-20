@@ -11,7 +11,8 @@ import {
   Layers,
   ArrowUpRight,
   ArrowDownLeft,
-  MoreHorizontal
+  MoreHorizontal,
+  HandHelping
 } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -40,8 +41,8 @@ export default async function DashboardPage() {
           <h1 style={{ fontSize: '3rem', fontWeight: '800', letterSpacing: '-0.04em', color: 'var(--foreground)' }}>Overview</h1>
           <p style={{ color: 'var(--secondary-foreground)', marginTop: '0.25rem', fontSize: '1.05rem', fontWeight: '500' }}>System-wide equipment and stock tracking.</p>
         </div>
-        <Link href="/inventory/new" className="btn btn-primary">
-          <Plus size={16} /> Add Item
+        <Link href="/inventory/select" className="btn btn-primary">
+          <HandHelping size={16} /> ยืม
         </Link>
       </header>
       

@@ -19,6 +19,21 @@ export async function PUT(
     const body = await request.json();
     const data = updateSchema.parse(body);
 
+    // Check if new SKU is already taken by ANOTHER equipment
+    const existing = await prisma.equipment.findFirst({
+      where: { 
+        sku: data.sku,
+        NOT: { id: id }
+      }
+    });
+
+    if (existing) {
+      return NextResponse.json(
+        { error: "This SKU is already assigned to another item" },
+        { status: 400 }
+      );
+    }
+
     const updated = await prisma.equipment.update({
       where: { id },
       data: {
@@ -29,7 +44,10 @@ export async function PUT(
 
     return NextResponse.json(updated);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.issues }, { status: 400 });
+    }
+    return NextResponse.json({ error: error.message || "Failed to update equipment" }, { status: 400 });
   }
 }
 

@@ -66,40 +66,40 @@ export default function EquipmentForm({ categories, initialData }: EquipmentForm
   };
 
   return (
-    <form onSubmit={handleSubmit} method="POST" className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+    <form onSubmit={handleSubmit} method="POST" className="card">
       {error && (
-        <div style={{ background: '#fee2e2', color: '#991b1b', padding: '1rem', borderRadius: 'var(--radius)', marginBottom: '1rem' }}>
+        <div style={{ background: 'var(--danger)', color: 'white', padding: '0.75rem 1rem', borderRadius: '0.5rem', marginBottom: '1.5rem', fontSize: '0.8125rem', fontWeight: '600' }}>
           {error}
         </div>
       )}
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>SKU *</label>
-        <input
-          name="sku"
-          defaultValue={initialData?.sku}
-          required
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
-        />
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+        <div>
+          <label>SKU *</label>
+          <input
+            name="sku"
+            defaultValue={initialData?.sku}
+            required
+            placeholder="e.g. LAP-001"
+          />
+        </div>
+        <div>
+          <label>Item Name *</label>
+          <input
+            name="name"
+            defaultValue={initialData?.name}
+            required
+            placeholder="e.g. MacBook Pro"
+          />
+        </div>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Name *</label>
-        <input
-          name="name"
-          defaultValue={initialData?.name}
-          required
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
-        />
-      </div>
-
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Category *</label>
+      <div style={{ marginBottom: '1.25rem' }}>
+        <label>Category *</label>
         <select
           name="categoryId"
           defaultValue={initialData?.categoryId}
           required
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
         >
           <option value="">Select a category</option>
           {categories.map((cat) => (
@@ -108,36 +108,34 @@ export default function EquipmentForm({ categories, initialData }: EquipmentForm
         </select>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Initial Quantity</label>
+          <label>Quantity</label>
           <input
             name="quantity"
             type="number"
             defaultValue={initialData?.quantity || 0}
             min="0"
-            style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
           />
         </div>
         <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Min Quantity (Alert)</label>
+          <label>Min Quantity (Alert)</label>
           <input
             name="minQuantity"
             type="number"
             defaultValue={initialData?.minQuantity || 0}
             min="0"
-            style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
           />
         </div>
       </div>
 
-      <div style={{ marginBottom: '1.5rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Description</label>
+      <div style={{ marginBottom: '2rem' }}>
+        <label>Description</label>
         <textarea
           name="description"
           defaultValue={initialData?.description || ''}
           rows={3}
-          style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}
+          placeholder="Additional details about the item..."
         />
       </div>
 

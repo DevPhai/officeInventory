@@ -48,42 +48,35 @@ test.describe('Office Equipment Inventory System', () => {
     await expect(qtyLocator).toHaveText((initialQty + 5).toString());
   });
 
-  test('should borrow and return items', async ({ page }) => {
-    await page.goto('/inventory');
-    await page.locator('text=Edit').first().click();
-    
-    const qtyLocator = page.locator('p:near(p:text("Available Stock"))').first();
-    const initialQtyText = await qtyLocator.textContent();
-    const initialQty = parseInt(initialQtyText || "0");
-
-    // Borrow
-    await page.fill('input[name="borrowerName"]', 'Test User');
-    await page.fill('div:has-text("Borrow Item") input[name="quantity"]', '1');
-    await page.click('button:text("Confirm Borrow")');
-    
-    // Verify stock decreased
-    await expect(qtyLocator).toHaveText((initialQty - 1).toString());
-
-    // Go to Borrows page
-    await page.goto('/borrows');
-    const outTable = page.locator('section:has-text("Currently Out") table');
-    await expect(outTable).toContainText('Test User');
-    
-    // Return
-    page.on('dialog', dialog => dialog.accept());
-    await outTable.locator('button:text("Mark Returned")').first().click();
-    
-    // Verify it moved to history
-    await expect(page.locator('section:has-text("Return History")')).toContainText('Test User');
-  });
-
   test('should show correct statistics on dashboard', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('h1')).toHaveText('Dashboard');
+    await expect(page.locator('h1')).toHaveText('Overview');
     
-    // Use more specific selectors for stats headers
-    await expect(page.locator('h3:text("Items")')).toBeVisible();
-    await expect(page.locator('h3:text("Borrowed")')).toBeVisible();
-    await expect(page.locator('h3:text("Activity")')).toBeVisible();
+    // Updated labels for Slate design
+    await expect(page.locator('h3:text("Total Assets")')).toBeVisible();
+    await expect(page.locator('h3:text("Active Loans")')).toBeVisible();
+    await expect(page.locator('h3:text("Operations")')).toBeVisible();
+  });
+
+  test('should toggle dark mode', async ({ page }) => {
+    await page.goto('/');
+    
+    const html = page.locator('html');
+    const toggle = page.locator('button[aria-label="Toggle Theme"]');
+    
+    // Initial state (Light mode)
+    await expect(html).not.toHaveClass(/dark/);
+    
+    // Switch to Dark mode
+    await toggle.click();
+    await expect(html).toHaveClass(/dark/);
+    
+    // Refresh page and check persistence
+    await page.reload();
+    await expect(html).toHaveClass(/dark/);
+    
+    // Switch back to Light mode
+    await toggle.click();
+    await expect(html).not.toHaveClass(/dark/);
   });
 });

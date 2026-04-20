@@ -1,6 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { AlertTriangle, Package, List, Activity, ArrowRight, Clock } from "lucide-react";
+import { 
+  Package, 
+  List, 
+  Activity, 
+  ArrowRight, 
+  Clock, 
+  Plus, 
+  History, 
+  Layers,
+  ArrowUpRight,
+  ArrowDownLeft,
+  MoreHorizontal
+} from "lucide-react";
 
 export default async function DashboardPage() {
   const allEquipment = await prisma.equipment.findMany({
@@ -13,110 +25,110 @@ export default async function DashboardPage() {
     where: { status: 'BORROWED' }
   });
   
-  // Identify low stock items
   const lowStockItems = allEquipment.filter(item => item.quantity <= item.minQuantity);
   
   const recentTransactions = await prisma.transaction.findMany({
-    take: 8,
+    take: 6,
     orderBy: { date: 'desc' },
     include: { equipment: true }
   });
 
   return (
-    <div style={{ paddingBottom: '3rem' }}>
-      <header style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{ fontSize: '2.25rem', fontWeight: '800', letterSpacing: '-0.025em' }}>Dashboard</h1>
-        <p style={{ color: '#666', marginTop: '0.5rem' }}>Welcome to your office equipment overview.</p>
+    <div style={{ paddingBottom: '5rem' }}>
+      <header style={{ marginBottom: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <h1 style={{ fontSize: '3rem', fontWeight: '800', letterSpacing: '-0.04em', color: 'var(--foreground)' }}>Overview</h1>
+          <p style={{ color: 'var(--secondary-foreground)', marginTop: '0.25rem', fontSize: '1.05rem', fontWeight: '500' }}>System-wide equipment and stock tracking.</p>
+        </div>
+        <Link href="/inventory/new" className="btn btn-primary">
+          <Plus size={16} /> Add Item
+        </Link>
       </header>
       
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 grid-cols-4" style={{ marginBottom: '3rem' }}>
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '4px solid var(--primary)' }}>
-          <div style={{ background: '#eff6ff', padding: '0.75rem', borderRadius: '1rem', color: 'var(--primary)' }}>
+      <div className="grid grid-cols-4" style={{ marginBottom: '4rem' }}>
+        <div className="card">
+          <div style={{ color: 'var(--foreground)', marginBottom: '1.25rem', opacity: 0.8 }}>
             <Package size={24} />
           </div>
-          <div>
-            <h3 style={{ fontSize: '0.7rem', color: '#666', fontWeight: '600', textTransform: 'uppercase' }}>Items</h3>
-            <p style={{ fontSize: '1.5rem', fontWeight: '800' }}>{totalItems}</p>
-          </div>
+          <h3 style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Total Assets</h3>
+          <p style={{ fontSize: '2.25rem', fontWeight: '800', marginTop: '0.125rem', letterSpacing: '-0.02em' }}>{totalItems.toLocaleString()}</p>
         </div>
         
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '4px solid var(--accent)' }}>
-          <div style={{ background: '#fef3c7', padding: '0.75rem', borderRadius: '1rem', color: 'var(--accent)' }}>
+        <div className="card">
+          <div style={{ color: 'var(--foreground)', marginBottom: '1.25rem', opacity: 0.8 }}>
             <Clock size={24} />
           </div>
-          <div>
-            <h3 style={{ fontSize: '0.7rem', color: '#666', fontWeight: '600', textTransform: 'uppercase' }}>Borrowed</h3>
-            <p style={{ fontSize: '1.5rem', fontWeight: '800' }}>{activeBorrowsCount}</p>
-          </div>
+          <h3 style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Active Loans</h3>
+          <p style={{ fontSize: '2.25rem', fontWeight: '800', marginTop: '0.125rem', letterSpacing: '-0.02em' }}>{activeBorrowsCount.toLocaleString()}</p>
         </div>
 
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '4px solid #8b5cf6' }}>
-          <div style={{ background: '#f5f3ff', padding: '0.75rem', borderRadius: '1rem', color: '#8b5cf6' }}>
-            <List size={24} />
+        <div className="card">
+          <div style={{ color: 'var(--foreground)', marginBottom: '1.25rem', opacity: 0.8 }}>
+            <Layers size={24} />
           </div>
-          <div>
-            <h3 style={{ fontSize: '0.7rem', color: '#666', fontWeight: '600', textTransform: 'uppercase' }}>Cats</h3>
-            <p style={{ fontSize: '1.5rem', fontWeight: '800' }}>{categoryCount}</p>
-          </div>
+          <h3 style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Categories</h3>
+          <p style={{ fontSize: '2.25rem', fontWeight: '800', marginTop: '0.125rem', letterSpacing: '-0.02em' }}>{categoryCount}</p>
         </div>
 
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderLeft: '4px solid #ec4899' }}>
-          <div style={{ background: '#fdf2f8', padding: '0.75rem', borderRadius: '1rem', color: '#ec4899' }}>
+        <div className="card">
+          <div style={{ color: 'var(--foreground)', marginBottom: '1.25rem', opacity: 0.8 }}>
             <Activity size={24} />
           </div>
-          <div>
-            <h3 style={{ fontSize: '0.7rem', color: '#666', fontWeight: '600', textTransform: 'uppercase' }}>Activity</h3>
-            <p style={{ fontSize: '1.5rem', fontWeight: '800' }}>{recentTransactions.length}</p>
-          </div>
+          <h3 style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Operations</h3>
+          <p style={{ fontSize: '2.25rem', fontWeight: '800', marginTop: '0.125rem', letterSpacing: '-0.02em' }}>{recentTransactions.length}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 grid-cols-2" style={{ alignItems: 'start' }}>
+      <div className="grid grid-cols-2" style={{ gap: '2.5rem' }}>
         {/* Low Stock Alerts */}
         <section>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-            <AlertTriangle color="var(--danger)" />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Low Stock Alerts</h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', padding: '0 0.5rem' }}>
+            <h2 style={{ fontSize: '1.125rem', fontWeight: '800', letterSpacing: '-0.02em' }}>Stock Critical</h2>
+            <MoreHorizontal size={20} style={{ color: 'var(--secondary-foreground)', cursor: 'pointer' }} />
           </div>
           
-          <div className="card" style={{ padding: '0' }}>
+          <div className="card" style={{ padding: '0', overflow: 'hidden', borderColor: '#eef2f6' }}>
             {lowStockItems.length === 0 ? (
-              <div style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>
-                <p>All items are sufficiently stocked.</p>
+              <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+                <p style={{ color: 'var(--secondary-foreground)', fontWeight: '600', fontSize: '0.875rem' }}>All stock levels are optimal.</p>
               </div>
             ) : (
               <ul style={{ listStyle: 'none' }}>
                 {lowStockItems.map((item, idx) => (
                   <li key={item.id} style={{ 
-                    padding: '1.25rem', 
-                    borderBottom: idx === lowStockItems.length - 1 ? 'none' : '1px solid var(--border)',
+                    padding: '1.25rem 1.5rem', 
+                    borderBottom: idx === lowStockItems.length - 1 ? 'none' : '1px solid #f1f5f9',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
+                    alignItems: 'center',
+                    transition: 'background 0.2s ease',
+                  }} className="list-item-hover">
                     <div>
-                      <h4 style={{ fontWeight: '700' }}>{item.name}</h4>
-                      <p style={{ fontSize: '0.875rem', color: '#666' }}>SKU: {item.sku} • {item.category.name}</p>
+                      <h4 style={{ fontWeight: '700', fontSize: '0.9375rem' }}>{item.name}</h4>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                        <span className="badge">{item.category.name}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', fontWeight: '600' }}>#{item.sku}</span>
+                      </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       <span style={{ 
                         color: 'var(--danger)', 
                         fontWeight: '800', 
-                        fontSize: '1.25rem',
+                        fontSize: '1.125rem',
                         display: 'block'
                       }}>
                         {item.quantity}
                       </span>
-                      <p style={{ fontSize: '0.75rem', color: '#666' }}>min: {item.minQuantity}</p>
+                      <p style={{ fontSize: '0.7rem', color: 'var(--secondary-foreground)', fontWeight: '700', marginTop: '0.125rem' }}>min: {item.minQuantity}</p>
                     </div>
                   </li>
                 ))}
               </ul>
             )}
-            <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', textAlign: 'center', background: '#fafafa' }}>
-              <Link href="/inventory" style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                Manage Inventory <ArrowRight size={16} />
+            <div style={{ padding: '1rem', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
+              <Link href="/inventory" style={{ color: 'var(--secondary-foreground)', fontWeight: '700', fontSize: '0.8125rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} className="hover-dark">
+                View Inventory <ArrowRight size={14} />
               </Link>
             </div>
           </div>
@@ -124,37 +136,48 @@ export default async function DashboardPage() {
 
         {/* Recent Transactions */}
         <section>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-            <Activity color="var(--primary)" />
-            <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Recent Activity</h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', padding: '0 0.5rem' }}>
+            <h2 style={{ fontSize: '1.125rem', fontWeight: '800', letterSpacing: '-0.02em' }}>Recent Transactions</h2>
+            <History size={18} style={{ color: 'var(--secondary-foreground)', cursor: 'pointer' }} />
           </div>
           
-          <div className="card" style={{ padding: '0' }}>
+          <div className="card" style={{ padding: '0', overflow: 'hidden', borderColor: '#eef2f6' }}>
             {recentTransactions.length === 0 ? (
-              <p style={{ padding: '2rem', textAlign: 'center', color: '#666' }}>No recent activity</p>
+              <div style={{ padding: '4rem 2rem', textAlign: 'center' }}>
+                <p style={{ color: 'var(--secondary-foreground)', fontWeight: '600', fontSize: '0.875rem' }}>No recent activity logged.</p>
+              </div>
             ) : (
               <ul style={{ listStyle: 'none' }}>
                 {recentTransactions.map((tx, idx) => (
                   <li key={tx.id} style={{ 
-                    padding: '1rem 1.25rem', 
-                    borderBottom: idx === recentTransactions.length - 1 ? 'none' : '1px solid var(--border)',
+                    padding: '1.125rem 1.5rem', 
+                    borderBottom: idx === recentTransactions.length - 1 ? 'none' : '1px solid #f1f5f9',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '1rem'
+                    gap: '1.25rem'
                   }}>
                     <div style={{ 
-                      width: '8px', 
-                      height: '8px', 
+                      width: '32px', 
+                      height: '32px', 
                       borderRadius: '50%', 
-                      background: tx.type === 'IN' ? '#22c55e' : '#ef4444' 
-                    }}></div>
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      background: 'var(--accent-soft)',
+                      color: 'var(--accent)'
+                    }}>
+                      {tx.type === 'IN' ? <ArrowDownLeft size={16} /> : <ArrowUpRight size={16} />}
+                    </div>
                     <div style={{ flex: 1 }}>
-                      <p style={{ fontWeight: '600' }}>{tx.equipment.name}</p>
-                      <p style={{ fontSize: '0.75rem', color: '#666' }}>{tx.date.toLocaleDateString()} • {tx.notes || (tx.type === 'IN' ? 'Stock Added' : 'Stock Removed')}</p>
+                      <p style={{ fontWeight: '700', fontSize: '0.9375rem' }}>{tx.equipment.name}</p>
+                      <p style={{ fontSize: '0.75rem', color: 'var(--secondary-foreground)', marginTop: '0.125rem', fontWeight: '600' }}>
+                        {tx.type === 'IN' ? 'Stock In-take' : tx.notes || 'Dispatched'} • {new Date(tx.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      </p>
                     </div>
                     <div style={{ 
-                      fontWeight: '700', 
-                      color: tx.type === 'IN' ? '#16a34a' : '#dc2626'
+                      fontWeight: '800', 
+                      color: tx.type === 'IN' ? 'var(--success)' : 'var(--foreground)',
+                      fontSize: '0.875rem',
                     }}>
                       {tx.type === 'IN' ? '+' : '-'}{tx.amount}
                     </div>
@@ -162,9 +185,9 @@ export default async function DashboardPage() {
                 ))}
               </ul>
             )}
-            <div style={{ padding: '1rem', borderTop: '1px solid var(--border)', textAlign: 'center', background: '#fafafa' }}>
-              <Link href="/transactions" style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                View All History <ArrowRight size={16} />
+            <div style={{ padding: '1rem', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
+              <Link href="/transactions" style={{ color: 'var(--secondary-foreground)', fontWeight: '700', fontSize: '0.8125rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }} className="hover-dark">
+                All Activity <ArrowRight size={14} />
               </Link>
             </div>
           </div>
@@ -173,3 +196,5 @@ export default async function DashboardPage() {
     </div>
   );
 }
+
+

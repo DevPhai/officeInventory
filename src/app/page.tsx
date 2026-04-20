@@ -157,16 +157,17 @@ export default async function DashboardPage() {
                     gap: '1.25rem'
                   }}>
                     <div style={{ 
-                      width: '32px', 
-                      height: '32px', 
+                      width: '36px', 
+                      height: '36px', 
                       borderRadius: '50%', 
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
-                      background: 'var(--accent-soft)',
-                      color: 'var(--accent)'
+                      background: tx.type === 'IN' ? 'rgba(5, 150, 105, 0.15)' : 'rgba(220, 38, 38, 0.15)',
+                      color: tx.type === 'IN' ? 'var(--success)' : 'var(--danger)',
+                      transition: 'transform 0.2s ease'
                     }}>
-                      {tx.type === 'IN' ? <ArrowDownLeft size={16} /> : <ArrowUpRight size={16} />}
+                      {tx.type === 'IN' ? <ArrowDownLeft size={18} strokeWidth={3} /> : <ArrowUpRight size={18} strokeWidth={3} />}
                     </div>
                     <div style={{ flex: 1 }}>
                       <p style={{ fontWeight: '700', fontSize: '0.9375rem' }}>{tx.equipment.name}</p>

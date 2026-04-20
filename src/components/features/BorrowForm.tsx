@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { HandHelping, Calendar, User, Hash } from 'lucide-react';
 
 interface BorrowFormProps {
   equipmentId: string;
@@ -54,32 +55,49 @@ export default function BorrowForm({ equipmentId, maxQuantity }: BorrowFormProps
   };
 
   return (
-    <div className="card" style={{ borderLeft: '4px solid var(--accent)' }}>
-      <h3 style={{ marginBottom: '1rem' }}>Borrow Item</h3>
+    <div className="card" style={{ borderLeft: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+        <div style={{ background: 'var(--accent-soft)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+          <HandHelping size={20} />
+        </div>
+        <h3 style={{ fontSize: '1.125rem', fontWeight: '800', letterSpacing: '-0.02em' }}>Borrow Item</h3>
+      </div>
+
       <form onSubmit={handleSubmit}>
         {error && (
-          <div style={{ background: '#fee2e2', color: '#991b1b', padding: '0.75rem', borderRadius: 'var(--radius)', marginBottom: '1rem', fontSize: '0.875rem' }}>
+          <div style={{ background: 'var(--danger)', color: 'white', padding: '0.75rem 1rem', borderRadius: '0.5rem', marginBottom: '1.5rem', fontSize: '0.8125rem', fontWeight: '600' }}>
             {error}
           </div>
         )}
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Borrower Name *</label>
-          <input name="borrowerName" required placeholder="Who is borrowing?" />
+        <div style={{ marginBottom: '1.25rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <User size={14} /> Borrower Name *
+          </label>
+          <input name="borrowerName" required placeholder="Full Name" />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '2rem' }}>
           <div>
-            <label>Quantity *</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Hash size={14} /> Quantity *
+            </label>
             <input name="quantity" type="number" min="1" max={maxQuantity} required defaultValue={1} />
           </div>
           <div>
-            <label>Due Date (Optional)</label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Calendar size={14} /> Due Date
+            </label>
             <input name="dueDate" type="date" />
           </div>
         </div>
 
-        <button type="submit" disabled={loading || maxQuantity <= 0} className="btn" style={{ width: '100%', background: 'var(--accent)', color: 'white' }}>
+        <button 
+          type="submit" 
+          disabled={loading || maxQuantity <= 0} 
+          className="btn btn-primary" 
+          style={{ width: '100%', padding: '1rem', fontSize: '0.875rem' }}
+        >
           {maxQuantity <= 0 ? 'Out of Stock' : loading ? 'Processing...' : 'Confirm Borrow'}
         </button>
       </form>
